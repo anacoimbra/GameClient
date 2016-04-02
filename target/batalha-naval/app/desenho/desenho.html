@@ -1,0 +1,46 @@
+<div class="container" ng-controller="DesenhoCtrl" ng-init="init()">
+  <div class="row">
+    <h2>{{jogador.nome}}</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-4" ng-if="jogador.turn">
+      <div class="row" style="text-align: center; margin-top: 10px">
+        <h4>Sua palavra é <b>{{desenho.palavra}}</b></h4>
+      </div>
+      <div class="row" >
+        <div id="cvs" class="col-md-10 col-md-offset-1" pw-canvas version="desenho.version" options="{color: model.myColor, undo: true, width: 300, height: 300, lineWidth: selectedLineWidth}"></div>
+      </div>
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-10 col-md-offset-1" pw-color-selector="['#000', '#A0522D', '#00f', '#ff0', '#0f0', '#f00', '#f0f']" color="model.myColor"></div>
+      </div>
+      <div class="row">
+        <input type="range" min="1" max="50" ng-model="selectedLineWidth" class="lineWidthSelector">{{selectedLineWidth}}
+      </div>
+      <div class="row" style="text-align:center">
+        <button class="btn btn-primary tiny" ng-click="undo()" ng-disabled="{{version < 1}}">Desfazer</button>
+        <button class="btn btn-primary tiny" ng-click="clean()" ng-disabled="version < 1">Limpar</button>
+        <button class="btn btn-primary tiny" ng-click="stop()" ng-disabled="version < 1">Desistir</button>
+      </div>
+    </div>
+    <div class="col-md-4" ng-if="!jogador.turn">
+      <img  id="img" data-ng-src="{{link}}" />
+    </div>
+    <div class="col-md-4" ng-if="!jogador.turn">
+      <form ng-submit="addMessage()" name="messageForm">
+        {{desenho.message}}
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Adivinhe !" ng-model="desenho.message">
+          <span class="input-group-btn">
+            <button ng-disabled="message.lengh > max || message.length == 0"  class="btn btn-default" type="button">Enviar!</button>
+          </span>
+        </div><!-- /input-group -->
+      </form>
+      <hr />
+      <p ng-repeat="message in desenho.messages | orderBy:'time':true" class="message">
+        <span><b>{{message.jogador.nome}}</b></span>
+        <time>{{message.time | date:'HH:mm'}}</time>
+        <span ng-class="{self: message.self}">{{message.message}}</span>
+      </p>
+    </div>
+  </div>
+</div>
