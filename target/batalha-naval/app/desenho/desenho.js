@@ -40,8 +40,7 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
       };
 
       function finalizar(){
-        blockTurno.start({message: "A palavra era " + $scope.desenho.palavra});
-        $timeout(
+        setTimeout(
             $scope.stop()
         , 10000);
       }
@@ -64,6 +63,7 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
         blockTurno.start({message: "Aguardando jogador .."});
         $http.get("/jogador")
             .success(function(data){
+                $scope.desenho.tempo = 0;
               $scope.jogador = data;
               if($scope.jogador != '') {
                 blockTurno.stop();
@@ -72,8 +72,13 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
                       .success(function (data) {
                         $scope.desenho.palavra = data;
                       });
+                    console.log($scope.desenho.palavra);
                 }
                 intervalo = setInterval(function () {
+                    $scope.desenho.tempo++;
+                    if($scope.desenho.tempo > 60){
+                        finalizar();
+                    }
                   if ($scope.jogador.turn) {
                     html2canvas($("#cvs"), {
                       onrendered: function (canvas) {
@@ -105,9 +110,12 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
       };
 
       $scope.stop = function(){
-        $scope.clean();
-        $scope.trocaTurno = true;
-        blockTurno.start({message: "Aguardando proximo jogador .."});
+          $scope.clean();
+          $http.get("/palavra")
+              .success(function (data) {
+                  blockTurno.start({message: "A palavra era " + data});
+              });
+          $scope.trocaTurno = true;
         clearInterval(intervalo);
       }
     }]);

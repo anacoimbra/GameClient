@@ -79,9 +79,17 @@ public class ChatController {
 
       if(strMsg.contains("acertou")){
         id = 0;
+        jogador.pontos += 10;
         fim = true;
       }
 
+      if(strMsg.contains("fim")){
+        id = 0;
+        if(jogador.turn){
+          jogador.pontos += 10;
+        }
+        fim = true;
+      }
 
       //FINALIZA A CONEX�O
       socktCli.close();

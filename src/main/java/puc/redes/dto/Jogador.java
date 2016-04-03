@@ -9,6 +9,7 @@ public class Jogador {
     public int id;
     public String nome;
     public boolean turn;
+    public int pontos = 0;
 
     public Jogador(int id, String nome){
         this.id = id;
