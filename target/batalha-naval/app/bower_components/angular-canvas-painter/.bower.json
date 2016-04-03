@@ -43,6 +43,5 @@
   },
   "_source": "git://github.com/pwambach/angular-canvas-painter.git",
   "_target": "~0.5.3",
-  "_originalSource": "angular-canvas-painter",
-  "_direct": true
+  "_originalSource": "angular-canvas-painter"
 }

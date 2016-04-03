@@ -3,7 +3,7 @@
     <h2>{{jogador.nome}}</h2>
   </div>
   <div class="row">
-    <div class="col-md-4" ng-if="jogador.turn">
+    <div class="col-md-4" ng-if="jogador.turn" block-ui="blockTurno">
       <div class="row" style="text-align: center; margin-top: 10px">
         <h4>Sua palavra é <b>{{desenho.palavra}}</b></h4>
       </div>
@@ -22,12 +22,12 @@
         <button class="btn btn-primary tiny" ng-click="stop()" ng-disabled="version < 1">Desistir</button>
       </div>
     </div>
-    <div class="col-md-4" ng-if="!jogador.turn">
-      <img  id="img" data-ng-src="{{link}}" />
-    </div>
-    <div class="col-md-4" ng-if="!jogador.turn">
-      <form ng-submit="addMessage()" name="messageForm">
-        {{desenho.message}}
+    <div class="col-md-8" ng-if="!jogador.turn" block-ui="blockTurno">
+      <div class="col-md-6">
+        <img  id="img" data-ng-src="{{link}}" />
+      </div>
+      <div class="col-md-6">
+        <form ng-submit="addMessage()" name="messageForm">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Adivinhe !" ng-model="desenho.message">
           <span class="input-group-btn">
@@ -35,12 +35,14 @@
           </span>
         </div><!-- /input-group -->
       </form>
-      <hr />
-      <p ng-repeat="message in desenho.messages | orderBy:'time':true" class="message">
-        <span><b>{{message.jogador.nome}}</b></span>
-        <time>{{message.time | date:'HH:mm'}}</time>
-        <span ng-class="{self: message.self}">{{message.message}}</span>
-      </p>
+        <hr />
+        <button class="btn btn-primary btn-block" ng-click="stop()">Desistir</button>
+        <p ng-repeat="message in desenho.messages | orderBy:'time':true" class="message">
+          <span><b>{{message.jogador.nome}}</b></span>
+          <time class="pull-right" style="color: #777777">{{message.time | date:'HH:mm'}}</time>
+          <span ng-class="{self: message.self}" style="margin-left: 15px;">{{message.message}}</span>
+        </p>
+      </div>
     </div>
   </div>
 </div>

@@ -24,11 +24,13 @@ public class ChatController {
 
   private String url = "";
   private AtomicInteger counter = new AtomicInteger();
-
+  private static int id = 0;
   private static Jogador jogador;
+  private String palavra = "";
+  private static boolean fim = false;
 
   //ENDERE�O DO SERVIDOR
-  String IPServidor = "192.168.1.241";
+  String IPServidor = "127.0.0.1";//"192.168.1.241";
   int PortaServidor = 7000;
 
   @RequestMapping(method = RequestMethod.GET)
@@ -45,7 +47,7 @@ public class ChatController {
   public void cliente (String msg) {
     try
     {
-
+      PortaServidor = 7000 + id;
       //ESTABELECE CONEX�O COM SERVIDOR
       System.out.println(" -C- Conectando ao servidor ->" + IPServidor + ":" +PortaServidor);
       Socket socktCli = new Socket (IPServidor,PortaServidor);
@@ -65,27 +67,54 @@ public class ChatController {
       //PROCESSA O PACOTE RECEBIDO
       System.out.println(" -C- Mensagem recebida: " + strMsg);
 
+      if(msg.equals("~inicio")){
+        String[] tmp = strMsg.split(";");
+        if(tmp.length >= 3) {
+          jogador = new Jogador(Integer.valueOf(tmp[0]), tmp[1], Boolean.valueOf(tmp[2]));
+          id++;
+          if(Boolean.valueOf(tmp[2]))
+            palavra = tmp[3];
+        }
+      }
+
+      if(strMsg.contains("acertou")){
+        id = 0;
+        fim = true;
+      }
+
+
       //FINALIZA A CONEX�O
       socktCli.close();
       System.out.println(" -C- Conexao finalizada...");
     }
     catch(Exception e) //SE OCORRER ALGUMA EXCESS�O, ENT�O DEVE SER TRATADA (AMIGAVELMENTE)
     {
+      jogador = null;
       System.out.println(" -C- O seguinte problema ocorreu : \n" + e.toString());
     }
+  }
+
+  @RequestMapping(value = "/fim", produces = "text/plain")
+  @ResponseBody
+  public String fim(){
+    id = 0;
+    return String.valueOf(fim);
   }
 
   @RequestMapping(value = "/jogador")
   @ResponseBody
   public Jogador getJogador(){
-    jogador = new Jogador(counter.incrementAndGet(), "Jogador " + counter.get());
-    return jogador;
+    cliente("~inicio");
+    if (jogador != null)
+      return jogador;
+    else
+      return null;
   }
 
   @RequestMapping(value = "/palavra", produces = "text/plain")
   @ResponseBody
   public String getPalavra(){
-    return "cadeira";
+    return palavra;
   }
 
   @RequestMapping(value = "/foto" ,
@@ -111,7 +140,7 @@ public class ChatController {
   @SendTo("/topic/greetings")
   @ResponseBody
   public OutputMessage greeting(Message message) throws Exception {
-//    guess(message.getMessage());
+    guess(message.getMessage());
     return new OutputMessage(message, new Date(), jogador);
   }
 }

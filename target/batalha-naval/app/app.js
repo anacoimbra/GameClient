@@ -4,6 +4,7 @@
 angular.module('myApp', [
   'ngRoute',
   'myApp.desenho',
+  'blockUI',
   'myApp.view2',
   'pw.canvas-painter',
   'myApp.version'
