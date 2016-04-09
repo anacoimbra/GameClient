@@ -30,7 +30,7 @@ public class ChatController {
   private static boolean fim = false;
 
   //ENDERE�O DO SERVIDOR
-  String IPServidor = "127.0.0.1";//"192.168.1.241";
+  String IPServidor = "192.168.0.2";//"192.168.1.241";
   int PortaServidor = 7000;
 
   @RequestMapping(method = RequestMethod.GET)
@@ -132,7 +132,10 @@ public class ChatController {
           headers = "Accept=*/*")
   @ResponseBody
   public String receberFoto(@RequestBody String url){
-    this.url = url;
+    if(!url.equals(this.url)) {
+      this.url = url;
+      cliente("~" + url);
+    }
     return url;
   }
 
