@@ -30,7 +30,7 @@ public class ChatController {
   private static boolean fim = false;
 
   //ENDERE�O DO SERVIDOR
-  String IPServidor = "192.168.0.2";//"192.168.1.241";
+  String IPServidor = "127.0.0.1";//"192.168.1.241";
   int PortaServidor = 7000;
 
   @RequestMapping(method = RequestMethod.GET)
@@ -75,6 +75,10 @@ public class ChatController {
           if(Boolean.valueOf(tmp[2]))
             palavra = tmp[3];
         }
+      }
+
+      if(msg.startsWith("~data:image/png;base64")){
+        this.url = strMsg;
       }
 
       if(strMsg.contains("acertou")){

@@ -98,9 +98,8 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
                   else {
                     $http.get("/foto")
                         .then(function (data) {
-                          if (data.length > 0)
                             $("#img").attr("src");
-                          $scope.link = data.data.url;
+                            $scope.link = data.data.url;
                         });
                   }
 
