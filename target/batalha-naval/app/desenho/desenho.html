@@ -30,8 +30,8 @@
         <div class="col-md-6">
           <div class="row" style="margin-top: 10px;">
             <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="{{desenho.tempo}}" aria-valuemin="0" aria-valuemax="60" style="width: {{desenho.tempo}}%">
-                {{60 - desenho.tempo}}s
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{desenho.tempo}}" aria-valuemin="0" aria-valuemax="60" style="width: {{desenho.tempo / 1000 * 0.7}}%">
+                {{desenho.tempo / 1000 | number: 0 }}s
               </div>
             </div>
           </div>

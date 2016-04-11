@@ -63,7 +63,11 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
         blockTurno.start({message: "Aguardando jogador .."});
         $http.get("/jogador")
             .success(function(data){
-                $scope.desenho.tempo = 0;
+                $http.get("/tempo")
+                    .success(function(data){
+                        console.log(data);
+                       $scope.desenho.tempo = data;
+                    });
               $scope.jogador = data;
               if($scope.jogador != '') {
                 blockTurno.stop();
@@ -75,8 +79,8 @@ angular.module('myApp.desenho', ['ngRoute','blockUI'])
                     console.log($scope.desenho.palavra);
                 }
                 intervalo = setInterval(function () {
-                    $scope.desenho.tempo++;
-                    if($scope.desenho.tempo > 60){
+                    $scope.desenho.tempo+= 1000;
+                    if($scope.desenho.tempo >= 60000){
                         finalizar();
                     }
                   if ($scope.jogador.turn) {

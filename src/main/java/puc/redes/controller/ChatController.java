@@ -28,6 +28,7 @@ public class ChatController {
   private static Jogador jogador;
   private String palavra = "";
   private static boolean fim = false;
+  private int tempo;
 
   //ENDERE�O DO SERVIDOR
   String IPServidor = "127.0.0.1";//"192.168.1.241";
@@ -47,7 +48,7 @@ public class ChatController {
   public void cliente (String msg) {
     try
     {
-      PortaServidor = 7000 + id;
+      PortaServidor = 7000;
       //ESTABELECE CONEX�O COM SERVIDOR
       System.out.println(" -C- Conectando ao servidor ->" + IPServidor + ":" +PortaServidor);
       Socket socktCli = new Socket (IPServidor,PortaServidor);
@@ -72,14 +73,20 @@ public class ChatController {
         if(tmp.length >= 3) {
           jogador = new Jogador(Integer.valueOf(tmp[0]), tmp[1], Boolean.valueOf(tmp[2]));
           id++;
-          if(Boolean.valueOf(tmp[2]))
+          if(Boolean.valueOf(tmp[2])) {
             palavra = tmp[3];
+            this.tempo = Integer.parseInt(tmp[4]);
+          }
+          else{
+
+          }
         }
       }
 
       if(msg.startsWith("~data:image/png;base64")){
         this.url = strMsg;
       }
+
 
       if(strMsg.contains("acertou")){
         id = 0;
@@ -121,6 +128,14 @@ public class ChatController {
       return jogador;
     else
       return null;
+  }
+
+  @RequestMapping(value = "/tempo")
+  @ResponseBody
+  public int getTempo(){
+//    cliente("~tempo");
+    System.out.println("Entrei no tempo " + tempo);
+    return tempo;
   }
 
   @RequestMapping(value = "/palavra", produces = "text/plain")
