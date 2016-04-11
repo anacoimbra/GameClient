@@ -31,7 +31,7 @@ public class ChatController {
   private int tempo;
 
   //ENDERE�O DO SERVIDOR
-  String IPServidor = "127.0.0.1";//"192.168.1.241";
+  String IPServidor = "192.168.0.2";//"192.168.1.241";
   int PortaServidor = 7000;
 
   @RequestMapping(method = RequestMethod.GET)

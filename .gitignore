@@ -59,7 +59,6 @@ fabric.properties
 
 *.iml
 
-bower_components/
 /target/
 *.json
 *.json
